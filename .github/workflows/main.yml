@@ -41,17 +41,15 @@ jobs:
             cd /var/www/html/portfolio-site-backend-adonis
             npm install
             
-            # Exportáljuk a környezeti változókat a build folyamat számára
-            export DB_HOST="${{ secrets.DB_HOST }}"
-            export DB_USER="${{ secrets.DB_USER }}"
-            export DB_DATABASE="${{ secrets.DB_DATABASE }}"
-            export DB_PORT="${{ secrets.DB_PORT }}"
-            export APP_KEY="${{ secrets.APP_KEY }}"
-            export HOST="${{ secrets.HOST }}"
-            export PORT="${{ secrets.PORT }}"
-            export LOG_LEVEL="${{ secrets.LOG_LEVEL }}"
-
-            # Futtatjuk a build parancsot
+            # Átadjuk a környezeti változókat a build folyamat számára
+            DB_HOST="${{ secrets.DB_HOST }}" \
+            DB_USER="${{ secrets.DB_USER }}" \
+            DB_DATABASE="${{ secrets.DB_DATABASE }}" \
+            DB_PORT="${{ secrets.DB_PORT }}" \
+            APP_KEY="${{ secrets.APP_KEY }}" \
+            HOST="${{ secrets.HOST }}" \
+            PORT="${{ secrets.PORT }}" \
+            LOG_LEVEL="${{ secrets.LOG_LEVEL }}" \
             npm run build
 
             # PM2-vel újraindítjuk az appot
