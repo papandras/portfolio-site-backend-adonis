@@ -29,11 +29,11 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            if [ ! -d "/var/www/portfolio-site-backend-adonis" ]; then
-              mkdir -p /var/www/portfolio-site-backend-adonis
-              chown -R www-data:www-data /var/www/portfolio-site-backend-adonis
+            if [ ! -d "/var/www/html/portfolio-site-backend-adonis" ]; then
+              mkdir -p /var/www/html/portfolio-site-backend-adonis
+              chown -R www-data:www-data /var/www/html/portfolio-site-backend-adonis
             fi
 
-            cd /var/www/portfolio-site-backend-adonis
+            cd /var/www/html/portfolio-site-backend-adonis
             rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/build/ .
             pm2 restart portfolio-site-backend-adonis
