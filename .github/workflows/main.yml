@@ -30,10 +30,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             if [ ! -d "/var/www/portfolio-site-backend-adonis" ]; then
-              sudo mkdir -p /var/www/portfolio-site-backend-adonis
-              sudo chown -R www-data:www-data /var/www/portfolio-site-backend-adonis
+              mkdir -p /var/www/portfolio-site-backend-adonis
+              chown -R www-data:www-data /var/www/portfolio-site-backend-adonis
             fi
 
             cd /var/www/portfolio-site-backend-adonis
-            sudo rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/build/ .
-            sudo pm2 restart portfolio-site-backend-adonis
+            rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/build/ .
+            pm2 restart portfolio-site-backend-adonis
