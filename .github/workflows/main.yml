@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy:
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -30,8 +31,7 @@ jobs:
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
             ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/html/portfolio-site-backend-adonis
 
-
-      - name: Install dependencies and restart app
+      - name: Install dependencies and start app with env variables
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -41,4 +41,14 @@ jobs:
             cd /var/www/html/portfolio-site-backend-adonis
             npm install
             npm run build
-            pm2 startOrRestart pm2.config.json
+            # Átadjuk a környezeti változókat a pm2 startOrRestart parancsnak
+            pm2 startOrRestart pm2.config.json \
+              --env production \
+              --update-env \
+              -- "DB_HOST=${{ secrets.DB_HOST }}" \
+              -- "DB_USER=${{ secrets.DB_USER }}" \
+              -- "DB_DATABASE=${{ secrets.DB_DATABASE }}" \
+              -- "DB_PORT=${{ secrets.DB_PORT }}" \
+              -- "APP_KEY=${{ secrets.APP_KEY }}" \
+              -- "HOST=${{ secrets.HOST }}" \
+              -- "PORT=${{ secrets.PORT }}"
