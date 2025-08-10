@@ -2,8 +2,7 @@
   "apps": [
     {
       "name": "portfolio-site-backend-adonis",
-      "script": "npm",
-      "args": "run start",
+      "script": "build/bin/server.js",
       "cwd": "/var/www/html/portfolio-site-backend-adonis",
       "exec_mode": "fork",
       "instances": 1,
