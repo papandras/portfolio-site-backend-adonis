@@ -37,20 +37,17 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          env:
+            DB_HOST: ${{ secrets.DB_HOST }}
+            DB_USER: ${{ secrets.DB_USER }}
+            DB_DATABASE: ${{ secrets.DB_DATABASE }}
+            DB_PORT: ${{ secrets.DB_PORT }}
+            APP_KEY: ${{ secrets.APP_KEY }}
+            HOST: ${{ secrets.HOST }}
+            PORT: ${{ secrets.PORT }}
+            LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
           script: |
             cd /var/www/html/portfolio-site-backend-adonis
             npm install
-            
-            # Átadjuk a környezeti változókat a build folyamat számára
-            DB_HOST="${{ secrets.DB_HOST }}" \
-            DB_USER="${{ secrets.DB_USER }}" \
-            DB_DATABASE="${{ secrets.DB_DATABASE }}" \
-            DB_PORT="${{ secrets.DB_PORT }}" \
-            APP_KEY="${{ secrets.APP_KEY }}" \
-            HOST="${{ secrets.HOST }}" \
-            PORT="${{ secrets.PORT }}" \
-            LOG_LEVEL="${{ secrets.LOG_LEVEL }}" \
             npm run build
-
-            # PM2-vel újraindítjuk az appot
             pm2 startOrRestart pm2.config.json --env production --update-env
