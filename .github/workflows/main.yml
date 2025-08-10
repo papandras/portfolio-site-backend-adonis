@@ -37,9 +37,18 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: DB_HOST,DB_USER,DB_DATABASE,DB_PORT,APP_KEY,HOST,PORT,LOG_LEVEL
           script: |
             cd /var/www/html/portfolio-site-backend-adonis
-            npm install
+            export DB_HOST="${DB_HOST}"
+            export DB_USER="${DB_USER}"
+            export DB_DATABASE="${DB_DATABASE}"
+            export DB_PORT="${DB_PORT}"
+            export APP_KEY="${APP_KEY}"
+            export HOST="${HOST}"
+            export PORT="${PORT}"
+            export LOG_LEVEL="${LOG_LEVEL}"
+            npm ci
             npm run build
             pm2 startOrRestart pm2.config.json --env production --update-env
         env:
