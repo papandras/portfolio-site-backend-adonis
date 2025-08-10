@@ -24,9 +24,7 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/portfolio-site-backend-adonis
-            
-            rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ .
+            rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ /var/www/html/portfolio-site-backend-adonis
 
             npm install --production
 
