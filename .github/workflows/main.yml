@@ -39,6 +39,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/portfolio-site-backend-adonis
-            npm install --production
+            npm install
             npm run build
             pm2 startOrRestart pm2.config.json
