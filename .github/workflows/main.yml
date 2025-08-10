@@ -9,18 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
@@ -30,13 +25,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/portfolio-site-backend-adonis
-
-            # Másoljuk át a projekt összes fájlját (kivéve a .env, node_modules, stb.)
-            ls /home/runner/work/portfolio-site-backend-adonis
+            
             rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ .
 
-            # Telepítsük a függőségeket a VPS-en
-            npm install
+            npm install --production
 
-            # A PM2 indítása a pm2.config.json fájllal
             pm2 startOrRestart pm2.config.json
