@@ -32,7 +32,7 @@ jobs:
             cd /var/www/html/portfolio-site-backend-adonis
 
             # Másoljuk át a projekt összes fájlját (kivéve a .env, node_modules, stb.)
-            ls ${{ github.workspace }}
+            ls /home/runner/work/portfolio-site-backend-adonis
             rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ .
 
             # Telepítsük a függőségeket a VPS-en
