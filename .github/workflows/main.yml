@@ -27,7 +27,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "deploy_tmp/*"
+          source: "deploy_tmp/."
           target: "/var/www/html/portfolio-site-backend-adonis"
           rm: false
           overwrite: true
