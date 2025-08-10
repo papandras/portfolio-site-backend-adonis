@@ -13,3 +13,51 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                   Int                      @id @default(autoincrement())
+  name                 String                   @unique
+  email                String                   @unique
+  password             String
+  registeredAt         DateTime                 @default(now())
+  administrativeStatus UserAdministrationStatus
+  roleId               Int
+  role                 Role                     @relation(fields: [roleId], references: [id])
+  logins               Login[]
+}
+
+enum UserAdministrationStatus {
+  Active
+  Archived
+  Pending
+}
+
+model GlobalConfiguration {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  code        String       @unique
+  users       User[]
+  permissions Permission[]
+}
+
+model Permission {
+  id     Int    @id @default(autoincrement())
+  name   String
+  code   String @unique
+  roleId Int?
+  role   Role?  @relation(fields: [roleId], references: [id])
+}
+
+model Login {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  ipAddress String?
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
