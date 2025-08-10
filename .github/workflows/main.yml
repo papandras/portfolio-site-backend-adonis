@@ -17,15 +17,24 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Deploy to VPS
+      - name: Upload files to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/var/www/html/portfolio-site-backend-adonis"
+          rm: true
+          exclude: "node_modules,.env,storage,logs"
+
+      - name: Install dependencies and restart app
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ /var/www/html/portfolio-site-backend-adonis
-
+            cd /var/www/html/portfolio-site-backend-adonis
             npm install --production
-
             pm2 startOrRestart pm2.config.json
