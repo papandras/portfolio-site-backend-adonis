@@ -4,9 +4,9 @@
       "name": "portfolio-site-backend-adonis",
       "script": "npm",
       "args": "run start",
-      "interpreter": "node",
-      "exec_mode": "cluster",
-      "instances": "max"
+      "exec_mode": "fork",
+      "instances": 1,
+      "autorestart": true
     }
   ]
 }
