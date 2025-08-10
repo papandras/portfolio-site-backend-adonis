@@ -2,8 +2,8 @@
   "apps": [
     {
       "name": "portfolio-site-backend-adonis",
-      "script": "start",
-      "args": "serve --port 3333 --host 0.0.0.0 --dev=false",
+      "script": "npm",
+      "args": "run start",
       "interpreter": "node",
       "exec_mode": "cluster",
       "instances": "max"
