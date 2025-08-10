@@ -31,4 +31,4 @@ jobs:
           script: |
             cd /var/www/html/portfolio-site-backend-adonis
             rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/build/ .
-            pm2 startOrRestart pm2.config.js
+            pm2 startOrRestart pm2.config.json
