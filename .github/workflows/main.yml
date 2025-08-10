@@ -17,20 +17,18 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Prepare upload dir
+      - name: Deploy with rsync
         run: |
-          rsync -av --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ./ ./deploy_tmp
-
-      - name: Upload files to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "deploy_tmp/."
-          target: "/var/www/html/portfolio-site-backend-adonis"
-          rm: false
-          overwrite: true
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.env' \
+            --exclude 'storage' \
+            --exclude 'logs' \
+            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
+            ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/html/portfolio-site-backend-adonis
 
 
       - name: Install dependencies and restart app
