@@ -1,0 +1,18 @@
+version: '3.7'
+
+volumes:
+  portfolio-site-backend-adonis-postgres-adata:
+    driver: local
+
+services:
+  portfolio-site-backend-adonis-postgres:
+    image: postgres:10.3
+    ports:
+      - '5401:5401'
+    restart: 'unless-stopped'
+    environment:
+      POSTGRES_USER: pAssw0rd
+      POSTGRES_PASSWORD: pAssw0rd
+    command: -p 5401
+    volumes:
+      - portfolio-site-backend-adonis-postgres-adata:/var/lib/postgresql/data
