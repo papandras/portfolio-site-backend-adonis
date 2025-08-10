@@ -28,7 +28,14 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /var/www/html/portfolio-site-backend-adonis
-            rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ .
-            pm2 startOrRestart pm2.config.json
+        script: |
+          cd /var/www/html/portfolio-site-backend-adonis
+
+          # Másoljuk át a projekt összes fájlját (kivéve a .env, node_modules, stb.)
+          rsync -avz --delete --exclude 'node_modules' --exclude '.env' --exclude 'storage' --exclude 'logs' ${{ github.workspace }}/ .
+
+          # Telepítsük a függőségeket a VPS-en
+          npm install
+
+          # A PM2 indítása a pm2.config.json fájllal
+          pm2 startOrRestart pm2.config.json
