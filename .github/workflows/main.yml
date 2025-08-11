@@ -50,7 +50,7 @@ jobs:
             export LOG_LEVEL="${LOG_LEVEL}"
             npm ci
             npm run build
-            pm2 startOrRestart pm2.config.json --env production --update-env
+            pm2 startOrRestart ecosystem.config.json --env production --update-env
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
