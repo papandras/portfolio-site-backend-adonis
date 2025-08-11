@@ -37,41 +37,20 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # Ezeket a runner környezetéből továbbítjuk a távoli shellbe:
           envs: DB_HOST,DB_USER,DB_DATABASE,DB_PORT,APP_KEY,HOST,PORT,LOG_LEVEL
           script: |
-            set -euo pipefail
-
             cd /var/www/html/portfolio-site-backend-adonis
-
-            # Exportáljuk, hogy a teljes session (npm, pm2) lássa
-            export DB_HOST="${DB_HOST:-}"
-            export DB_USER="${DB_USER:-}"
-            export DB_DATABASE="${DB_DATABASE:-}"
-            export DB_PORT="${DB_PORT:-}"
-            export APP_KEY="${APP_KEY:-}"
-            export HOST="${HOST:-}"
-            export PORT="${PORT:-}"
-            export LOG_LEVEL="${LOG_LEVEL:-}"
-
-            echo "ENV check (set/not set):"
-            for v in PORT HOST LOG_LEVEL DB_HOST DB_PORT DB_USER DB_DATABASE; do
-              if [ -z "${!v:-}" ]; then
-                echo "$v is NOT set"
-              else
-                echo "$v is set"
-              fi
-            done
-            [ -n "${APP_KEY:-}" ] && echo "APP_KEY is set" || echo "APP_KEY is NOT set"
-
+            export DB_HOST="${DB_HOST}"
+            export DB_USER="${DB_USER}"
+            export DB_DATABASE="${DB_DATABASE}"
+            export DB_PORT="${DB_PORT}"
+            export APP_KEY="${APP_KEY}"
+            export HOST="${HOST}"
+            export PORT="${PORT}"
+            export LOG_LEVEL="${LOG_LEVEL}"
             npm ci
             npm run build
-
-            # PM2 indítás/frissítés a production env-vel
             pm2 startOrRestart pm2.config.json --env production --update-env
-
-            # Opcionális: PM2 környezet ellenőrzése
-            pm2 list
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
