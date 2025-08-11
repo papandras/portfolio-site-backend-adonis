@@ -39,6 +39,10 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   })
   .httpServer()
   .start()
+  .then(() => {
+    console.log('Server started successfully')
+    console.log(`Visit: http://localhost:${process.env.PORT || 3333}`)
+  })
   .catch((error) => {
     process.exitCode = 1
     prettyPrintError(error)
